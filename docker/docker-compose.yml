@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+
+  jupyter:
+    build:
+      context: .
+      args:
+        - http_proxy=${http_proxy}
+        - https_proxy=${https_proxy}
+    ports:
+      - ${BIND_IP:-127.0.0.1}:${BIND_PORT:-8888}:8888
+    volumes:
+      - ${WORKDIR}:/home/jovyan/work
+      - conda_home:/opt/conda
+      - user_home:/home/jovyan
+    environment:
+      - http_proxy
+      - https_proxy
+    command: ["${MODE:-lab}"]
+
+volumes:
+  conda_home:
+  user_home:
