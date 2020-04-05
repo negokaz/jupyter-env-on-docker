@@ -3,7 +3,7 @@
 ## Usage
 
 ```
-./jupyter-env.sh
+./jupyter-on-docker.sh
 ```
 
 ## Settings
