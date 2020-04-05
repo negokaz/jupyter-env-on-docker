@@ -1,4 +1,12 @@
-# Jupyter Environment on Docker
+# jupyter-on-docker
+
+Ready-to-use Jupyter environment using Docker
+
+## Requirements
+
+- [Docker](https://www.docker.com/get-started)
+- [docker-compose](https://docs.docker.com/compose/)
+- bash
 
 ## Usage
 
