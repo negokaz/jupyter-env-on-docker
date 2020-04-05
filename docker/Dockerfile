@@ -3,6 +3,8 @@ FROM jupyter/minimal-notebook:latest
 USER root
 
 RUN set -xe; \
+    : add package; \
+    apt-get install -y bash; \
     : disable authentication; \
     echo "c.NotebookApp.token = ''"    >> ${HOME}/.jupyter/jupyter_notebook_config.py; \
     echo "c.NotebookApp.password = ''" >> ${HOME}/.jupyter/jupyter_notebook_config.py;
