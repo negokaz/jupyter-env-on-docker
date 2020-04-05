@@ -24,7 +24,7 @@ function main {
   local sub_command="$1"; shift 1
   case "${sub_command:-up}" in
     'build' )
-      build
+      build "$@"
       ;;
     'up' )
       up "$@"
@@ -120,11 +120,54 @@ function up/on_exit {
   /usr/bin/env kill -PIPE -- -$$
 }
 
+build_with_pull='false'
+
 function build {
+  build/parse_arguments "$@"
+
+  if ${build_with_pull}
+  then
+    local pull='--pull'
+  else
+    local pull=''
+  fi
+
   docker_compose build \
     --no-cache \
+    ${pull} \
     ${http_proxy:+--build-arg "http_proxy=${http_proxy}"} \
     ${https_proxy:+--build-arg "https_proxy=${https_proxy}"}
+}
+
+function build/parse_arguments {
+  while [ $# -gt 0 ]
+  do
+    case "$1" in
+      *'help' )
+        build/print_usage
+        exit 0
+        ;;
+      '--pull' )
+        build_with_pull='true'
+        shift 2
+        ;;
+      -* )
+        echo "Unknown option: $1"
+        build/print_usage
+        exit 1
+        ;;
+    esac
+  done
+}
+
+function build/print_usage {
+  cat - <<EOL
+
+Usage: ${script_name} build [options...]
+
+Options:
+  --pull    Pull a newer version of Jupyter image
+EOL
 }
 
 function docker_compose {
