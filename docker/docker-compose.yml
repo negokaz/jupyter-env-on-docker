@@ -11,6 +11,7 @@ services:
     ports:
       - ${BIND_IP:-127.0.0.1}:${BIND_PORT:-8888}:8888
     volumes:
+      - ../notebook_templates:/home/jovyan/notebook_templates
       - ${WORKDIR}:/home/jovyan/work
       - conda_home:/opt/conda
       - user_home:/home/jovyan

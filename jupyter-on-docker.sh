@@ -58,7 +58,13 @@ function up {
     cd "${workdir//\\//}"
   fi
 
-  docker_compose down
+  local down_opt=''
+  if ${reset}
+  then
+    local down_opt='--volume'
+  fi
+
+  docker_compose down ${down_opt}
 
   up/wait_open_browser &
 
@@ -68,6 +74,8 @@ function up {
 }
 
 workdir=''
+
+reset=false
 
 function up/parse_arguments {
   while [ $# -gt 0 ]
@@ -80,6 +88,10 @@ function up/parse_arguments {
       '--workdir' )
         workdir="$2"
         shift 2
+        ;;
+      '--reset' )
+        reset=true
+        shift 1
         ;;
       -* )
         echo "Unknown option: $1"

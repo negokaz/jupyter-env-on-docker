@@ -5,16 +5,20 @@ USER root
 RUN set -xe; \
     : add package; \
     apt-get install -y bash; \
-    : disable authentication; \
-    echo "c.NotebookApp.token = ''"    >> ${HOME}/.jupyter/jupyter_notebook_config.py; \
-    echo "c.NotebookApp.password = ''" >> ${HOME}/.jupyter/jupyter_notebook_config.py;
+    : done
+
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+
+RUN set -xe; \
+    chmod +x /usr/local/bin/entrypoint.sh; \
+    : done
 
 USER $NB_UID
 
 WORKDIR ${HOME}/work
 EXPOSE 8888
 
-VOLUME ["/home/jovyan/"]
+VOLUME ["/home/jovyan/", "/tmp/"]
 
-ENTRYPOINT ["/usr/local/bin/start.sh", "jupyter"]
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 CMD ["lab"]
